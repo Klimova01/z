@@ -1,0 +1,42 @@
+#include <iostream> 
+#include <string> 
+#include <map> 
+using namespace std;
+ 
+struct data1 { 
+ int group, age, scholarship; // группа, возраст, стипендия
+ 
+ data1(void) { group = age = scholarship = 0; }
+ 
+ data1(int group, int age, int scholarship = 0)
+ : group(group), age(age), scholarship(scholarship) {}
+ 
+ data1(const data1& d) :
+ group(d.group), age(d.age), scholarship(d.scholarship) {}
+ 
+ inline friend ostream& operator <<(ostream& out, const data1& obj) {
+ return out << "[" << obj.group << " : " << obj.age
+ << " : " << obj.scholarship << " ]";
+ }
+};
+// это и есть наша таблица ФИО здесь - ключ:
+typedef map< string, data1 > faculty;
+ 
+int main(void) {
+ setlocale(LC_ALL, "rus");
+ 
+ faculty filology;
+ // заполняем поочерёдно 3 записи :
+ filology.insert(pair< string, data1 >("КлимоваЮ.В.", data1(13, 19)));
+ filology.insert(pair< string, data1 >("Иванов И.И.", data1(13, 20)));
+ filology.insert(pair< string, data1 >("Петров П.П.", data1(11, 21)));
+ // вывод на экран ФИО и учётных данных
+ for (auto i = filology.begin(); i != filology.end(); i++) {
+ cout << i->first << " : " << i->second << endl;
+ } 
+ 
+ 
+data1 d1(filology["Иванов И.И."]);
+ data1 d2 = filology["Иванов И.И."];
+ cout << d2 << endl; 
+}
