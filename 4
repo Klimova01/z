@@ -1,0 +1,75 @@
+#include <iostream>
+ 
+using namespace std;
+ 
+struct list { // структура списка
+    int data; /*переменная, хранящая значение элемента*/
+    list *next; /*ссылку на следующий элемент*/
+};
+void func(list *&begin,  int num) {
+ 
+    if (begin == nullptr) { // если список пуст, то мы создаём элемент в заголовке
+        begin = new list();
+        begin->data = num;
+        begin->next = nullptr;
+ 
+    }
+    else {
+        if (num <= begin->data)
+        {
+            list * new_elem = new list();
+            new_elem->data = num;
+            new_elem->next = begin;
+            begin = new_elem;
+        }
+        else
+        {
+            list *ptr = begin;
+            while (ptr->next && num >= ptr->next->data ) { // сравниваем
+                ptr = ptr->next;
+            }
+ 
+            list * next = ptr->next;
+            list * new_elem = new list();
+            new_elem->data = num;
+            ptr->next = new_elem;
+            new_elem->next = next;
+ 
+        }
+ 
+    }
+}
+ 
+void list_print(list *begin) {
+    if (begin == nullptr) {
+        cout << "Ошибка! Список пуст!" << endl;
+        exit(1);
+    }
+    list *n = begin;
+    while (n) {
+        cout << n->data << " -> ";
+        n = n->next;
+    }
+    cout << "NULL" << endl;
+}
+ 
+int main()
+{
+    setlocale(LC_ALL, "ru");
+    list *begin = nullptr;
+ 
+    int size;
+    cout << "Введите размер списка: ";
+    cin >> size;
+ 
+    for (int i = 0; i < size; i++) {
+        cout << "Введите элемент: ";
+        int num;
+        cin >> num;
+        func(begin, num);
+    }
+ 
+    list_print(begin);
+ 
+    return 0;
+}
